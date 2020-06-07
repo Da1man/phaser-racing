@@ -10,6 +10,7 @@ const TURNS = Object.freeze({
 });
 const SPEED = 10;
 const ACCELERATION = 0.5;
+const SLIDE_ANGLE = 5;
 
 export default class Player {
   constructor(scene, map) {
@@ -19,6 +20,7 @@ export default class Player {
     this.car = this.scene.matter.add.sprite(position.x, position.y, 'objects', 'car_blue_1')
     this.car.setFixedRotation(true)
     this._velocity = 0;
+    this.checkpoint = 0;
   }
 
   get direction() {
@@ -69,10 +71,34 @@ export default class Player {
     return SPEED * this.map.getTileFriction(this.car)
   }
 
+  side(){
+    this.car.angle += SLIDE_ANGLE;
+  }
+
   move() {
     this.car.setAngle(this.angle)
     const velocity = this.getVelocityFromAngle()
     this.car.setVelocity(velocity.x, velocity.y)
+    this.checkPosition();
+  }
+
+  checkPosition() {
+    const checkpoint = this.map.getCheckpoint(this.car)
+    if (checkpoint) {
+      this.onCheckpoint(checkpoint)
+    }
+
+  }
+
+  onCheckpoint(checkpoint) {
+    console.log(this.checkpoint, checkpoint)
+    if (checkpoint === 1 && this.checkpoint === this.map.checpoints.length) {
+      this.checkpoint = 1;
+      this.car.emit('lap')
+    } else if (checkpoint === this.checkpoint + 1) {
+      ++this.checkpoint;
+    }
+
   }
 }
 

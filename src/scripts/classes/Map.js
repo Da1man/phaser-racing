@@ -20,6 +20,8 @@ export default class Map {
   create() {
     this.createLayers();
     this.createCollisions();
+    this.createCheckpoints();
+    this.createOils();
   }
 
   createLayers() {
@@ -37,6 +39,24 @@ export default class Map {
     })
   }
 
+  createOils() {
+    this.tilemap.findObject('oils', oil => {
+      const sprite = this.scene.matter.add.sprite(oil.x + oil.width / 2, oil.y - oil.height / 2, 'objects', 'oil')
+      sprite.setStatic(true)
+      sprite.setSensor(true)
+    })
+  }
+
+  createCheckpoints() {
+    this.checpoints = [];
+
+    this.tilemap.findObject('checkpoints', checkpoint => {
+      let rectangle = new Phaser.Geom.Rectangle(checkpoint.x, checkpoint.y, checkpoint.width, checkpoint.height)
+      rectangle.index = checkpoint.properties.find(property => property.name === 'value').value
+      this.checpoints.push(rectangle)
+    })
+  }
+
   getPlayerPosition() {
     return this.tilemap.findObject('player', position => {
       return position.name === 'player'
@@ -51,5 +71,10 @@ export default class Map {
       }
     }
     return GRASS_FRICTION
+  }
+
+  getCheckpoint(car) {
+    const checkpoint = this.checpoints.find(checkpoint => checkpoint.contains(car.x, car.y))
+    return checkpoint ? parseInt(checkpoint.index) : false
   }
 }
