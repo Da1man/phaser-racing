@@ -31,7 +31,7 @@ export default class StatsPopup {
       .setScrollFactor(0)
 
     this.scene.input.once('pointerdown', () => {
-      this.scene.scene.start('Game')
+      this.scene.scene.start('Start')
     })
   }
 }
