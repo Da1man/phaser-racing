@@ -14,7 +14,6 @@ export default class Stats {
   }
 
   onLapComplete() {
-    console.log('onLapComplete')
     ++this.lap;
 
     if (this.timeBestLap === 0 || this.timeLap < this.timeBestLap) {
@@ -29,7 +28,7 @@ export default class Stats {
     if (!this.complete) {
       const time = dt / 1000;
       this.time += time;
-      this.limeLap += time;
+      this.timeLap += time;
       console.log(this)
     }
   }
