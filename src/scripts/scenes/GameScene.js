@@ -49,6 +49,11 @@ export default class GameScene extends Phaser.Scene {
         this.player = new Player(this, this.map, car.player);
         if(this.client) {
             this.enemy = new Player(this, this.map, car.enemy);
+            this.client.on('data', (data) => {
+                this.enemy.car.setX(data.x);
+                this.enemy.car.setY(data.y);
+                this.enemy.car.setAngle(data.angle);
+            })
         }
         this.stats = new Stats(this, LAPS);
         this.statsPanel = new StatsPanel(this, this.stats);
@@ -76,5 +81,15 @@ export default class GameScene extends Phaser.Scene {
         this.stats.update(dt);
         this.statsPanel.render();
         this.player.move();
+        this.sync();
+    }
+    sync() {
+        if (this.client) {
+            this.client.send({
+                x: this.player.car.x,
+                y: this.player.car.y,
+                angle: this.player.car.angle,
+            })
+        }
     }
 }
