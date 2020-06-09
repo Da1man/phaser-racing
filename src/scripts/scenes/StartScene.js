@@ -1,4 +1,4 @@
-
+import Client from '../classes/Client';
 
 export default class StartScene extends Phaser.Scene {
   constructor(){
@@ -26,18 +26,20 @@ export default class StartScene extends Phaser.Scene {
   }
 
   setEvents() {
-    this.button1.on('pointerdown', this.startGame, this)
-    this.button2.on('pointerdown', this.requestGame, this)
+    this.button1.on('pointerdown', this.startGame, this);
+    this.button2.on('pointerdown', this.requestGame, this);
   }
 
   startGame() {
     this.scene.start("Game")
   }
   requestGame() {
-    // инициализировать запрос на сервер
+    // инициализировать клиент
+    this.client = new Client()
     // отправить запрос игры на сервер
-    // по факту получения противника
-    // начать игру
-    this.startGame()
+    this.client.init()
+    // по факту получения противника начать игру
+    this.client.on('game', this.startGame, this)
+
   }
 }

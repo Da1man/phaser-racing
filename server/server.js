@@ -8,6 +8,8 @@ const http = require('http');
 const path = require('path');
 const express = require('express');
 
+const socketIO = require('socket.io');
+
 
 //  2. Создать сервер, используя express и http
 
@@ -26,4 +28,9 @@ app.use(staticContent);
 
 server.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`)
+});
+
+const io = socketIO(server);
+io.on('connection', (socket) => {
+  console.log('new user connected', socket.id)
 });
