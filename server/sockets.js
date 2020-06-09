@@ -18,9 +18,8 @@ module.exports = {
     this.sessions.push(session)
   },
   startGame(session) {
-    session.playerSocket.emit('gameStart');
+    session.playerSocket.emit('gameStart', {master: true});
     session.enemySocket.emit('gameStart');
-
   },
   onConnection(socket) {
     console.log('new user connected', socket.id)
