@@ -12,7 +12,6 @@ export default class Client extends Phaser.Events.EventEmitter {
     const socket = io(HOST);
 
     socket.on('connect', () => {
-      socket.emit('gameStart')
       console.log('client connected')
     });
 

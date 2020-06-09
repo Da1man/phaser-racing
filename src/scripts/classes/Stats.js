@@ -29,7 +29,6 @@ export default class Stats {
       const time = dt / 1000;
       this.time += time;
       this.timeLap += time;
-      console.log(this)
     }
   }
 }
